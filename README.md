@@ -10,9 +10,9 @@ Some scripts have a comment for help information
 3. Run ```./win-install.ps1``` (also in admin shell)
 4. Reboot
 
-### Debian/Ubuntu
+### Debian/Ubuntu (Not inplemented yet)
 1. Clone the repo to somewhere
 2. Run ```./deb-install.sh```
 
-### Arch(AUR)
+### Arch(AUR) (Not inplemented yet)
 1. [Install](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages) the aur package [tinyscripts-git](https://aur.archlinux.org/tinyscripts-git)
