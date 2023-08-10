@@ -7,7 +7,7 @@ Some scripts have a comment for help information
 ### Windows
 1. Clone the repo to somewhere
 2. Run this in a administrator shell ```Set-ExecutionPolicy unrestricted```
-3. Run ```./win-install.ps1```
+3. Run ```./win-install.ps1``` (also in admin shell)
 
 ### Debian/Ubuntu
 1. Clone the repo to somewhere
