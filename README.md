@@ -1,7 +1,7 @@
 # tinyscripts
 A bunch of tiny shell scripts. Most are for linux.
 
-Man pages for each of the scripts are located in man/ts-*scriptname*
+Some scripts have a comment for help information
 
 ## Install
 ### Windows
