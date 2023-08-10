@@ -8,6 +8,7 @@ Some scripts have a comment for help information
 1. Clone the repo to somewhere
 2. Run this in a administrator shell ```Set-ExecutionPolicy unrestricted```
 3. Run ```./win-install.ps1``` (also in admin shell)
+4. Reboot
 
 ### Debian/Ubuntu
 1. Clone the repo to somewhere
