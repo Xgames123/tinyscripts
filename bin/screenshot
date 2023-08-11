@@ -1,0 +1,28 @@
+#!/bin/bash
+# A dmenu script for taking screenshots for wayland
+# DEPS: xdg-utils, wl-clipboard, slurp, grim
+SCREENSHOT_DIR=~/Screenshots
+DMENU_CMD="tofi --prompt-text screenshot:"
+
+function main() {
+
+pos=$(slurp)
+
+action=$(echo $'retake\nclipboard\nfile\nfile and open' | $DMENU_CMD ) 
+
+if [ "$action" = "retake" ] ; then
+   main
+elif [ "$action" = "clipboard" ] ; then
+   echo "$pos" | grim -g - - | wl-copy
+elif [ "$action" = "file" ] || [ "$action" = "file and open" ] ; then
+   mkdir "$SCREENSHOT_DIR"
+   path="$SCREENSHOT_DIR/$(date '+%H:%M:%S_%m-%d-%Y').png"
+   echo "$pos" | grim -g - "$path"
+   if [ "$action" = "file and open" ] ; then
+      xdg-open "$path"
+   fi
+fi
+
+}
+
+main

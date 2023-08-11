@@ -1,7 +1,9 @@
 # tinyscripts
-A bunch of tiny shell scripts. Most are for linux.
+A bunch of tiny shell scripts. Most are for Linux.
 
-Some scripts have a comment for help information
+Some scripts have a comment for help, dependency information
+
+NOTE: If a script doesn't work try opening it and checking if dependencies are installed
 
 ## Install
 ### Windows
@@ -15,4 +17,5 @@ Some scripts have a comment for help information
 2. Run ```./deb-install.sh```
 
 ### Arch(AUR) (Not inplemented yet)
-1. [Install](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages) the aur package [tinyscripts-git](https://aur.archlinux.org/tinyscripts-git)
+1. Clone the repo to somewhere
+2. Run ```makepkg --syncdeps --install ``` NOTE: make shure you are in the directory you just cloned

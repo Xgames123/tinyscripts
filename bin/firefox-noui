@@ -1,0 +1,17 @@
+#!/bin/bash
+# Opens an url in a firefox popup window so that the top bar is gone
+# Edit or create the noui profile in firefox for configuration
+# Usage: firefox-noui url
+# 
+# EXAMPLES:
+#   firefox-noui https://discord.com/login
+#
+# DEPS: firefox
+
+HTML_CODE="<!DOCTYPE html><html><head><title>Close me</title><script type=\"text/javascript\">const urlParams = new URLSearchParams(window.location.search);window.open(urlParams.get(\"url\"),\"_blank\",\"outerWidth=400,outerHeight=200,top=500,left=600,menubar=no,toolbar=no,location=no,personalbar=no,status=no,resizable\");</script></head><body><p>You can close this window when the popup loads</p></body></html>"
+URL=$1
+
+echo $HTML_CODE > /tmp/firefox-noui.html
+
+firefox --no-remote -P noui --url file:///tmp/firefox-noui.html?url=$URL
+

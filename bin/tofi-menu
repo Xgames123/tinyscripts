@@ -1,0 +1,15 @@
+#!/bin/bash
+# Program launcher using tofi 
+# The config file($HOME/.tofi-menu) is in the format name:command
+# DEPS: ripgrep, tofi
+
+TOFI_CMD="tofi"
+CONFIG_FILE="$HOME/.tofi-menu"
+
+awnser=$(rg -o "^[^#:]*" $CONFIG_FILE | $TOFI_CMD)
+
+if [ "$awnser" = "" ] ; then
+   exit -1
+fi
+
+eval $(rg -o -r '$2' "($awnser[\s:]*)([^#\n]*)" $CONFIG_FILE)
