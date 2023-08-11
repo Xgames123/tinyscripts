@@ -16,6 +16,6 @@ NOTE: If a script doesn't work try opening it and checking if dependencies are i
 1. Clone the repo to somewhere
 2. Run ```./deb-install.sh```
 
-### Arch(AUR) (Not inplemented yet)
+### Arch
 1. Clone the repo to somewhere
 2. Run ```makepkg --syncdeps --install ``` NOTE: make shure you are in the directory you just cloned
