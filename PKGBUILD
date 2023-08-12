@@ -1,5 +1,5 @@
 # Maintainer: ldev <ldev@ldev.eu.org>
-pkgver=r11.388ebee
+pkgver=r12.77faccb
 pkgrel=1
 
 pkgname='tinyscripts'
@@ -19,9 +19,10 @@ pkgver() {
 }
 
 package(){
-
-  for file in "bin/"; do 
+  cd $pkgname
+  mkdir -p "$pkgdir/usr/bin"
+  for file in $(ls bin) ; do 
     # 755 rwxr-xr-x
-    install -Dm 755 "$file" "$pkgdir/usr/bin/"
+    install -Dm 755 "bin/$file" -t "$pkgdir/usr/bin/"
   done
 }
