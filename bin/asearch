@@ -1,0 +1,18 @@
+#!/bin/sh
+# A script that opens archlinux.org or aur.archlinux.org with a search query
+# Usage: asearch [--aur|-a] search_query 
+#
+# EXAMPLES:
+#    asearch htop
+#    asearch git
+#    asearch -a dwl 
+#
+# DEPS: xdg-open
+
+if [ $1 = "--aur" ] || [ $1 = "-a" ] ; then
+  URL="https://aur.archlinux.org/packages?K=$2"
+else
+  URL="https://archlinux.org/packages/$1"
+fi
+
+xdg-open $URL
