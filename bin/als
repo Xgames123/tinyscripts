@@ -1,11 +1,12 @@
 #!/bin/sh
+# ArchLinuxSearch (als)
 # A script that opens archlinux.org or aur.archlinux.org with a search query
-# Usage: asearch [--aur|-a] search_query 
+# Usage: als [--aur|-a] search_query 
 #
 # EXAMPLES:
-#    asearch htop
-#    asearch git
-#    asearch -a dwl 
+#    als htop
+#    als git
+#    als -a dwl 
 #
 # DEPS: xdg-open
 
