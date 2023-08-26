@@ -1,0 +1,25 @@
+#!/bin/bash
+# Usage: trapy signal|-l
+# Signals: trapy -l
+
+signal=$1
+
+if [ "$signal" = "-l" ] ; then
+	trap -l
+	exit 0
+fi
+
+
+trap "ontrap $signal" $signal 
+
+function ontrap() {
+	echo "trapy: $1"
+	echo "trapy: $1" >> /tmp/trapy.log
+	exit 0
+}
+
+echo "trapy: start for $signal"
+echo "trapy: start for $signal" >> /tmp/trapy.log
+while $true ; do
+	sleep 1 
+done
