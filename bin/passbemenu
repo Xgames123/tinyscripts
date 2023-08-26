@@ -1,10 +1,10 @@
 #!/bin/bash
 # 
-# Usage: passmenu [command]
+# Usage: passbemenu [command]
 # Commands:
 #   type
 #   clipboard
-# DEPS: ripgrep, pass, dmenu, wtype
+# DEPS: ripgrep, pass, bemenu, wtype
 
 MENU_CMD="bemenu --prompt pass"
 PASSWORD_DIR="$HOME/.password-store"
