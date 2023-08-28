@@ -1,15 +1,15 @@
 #!/bin/bash
-# Program launcher using dmenu 
+# Program launcher using bemenu 
 # The config file($HOME/.sysmenu) is in the format name:command
-# DEPS: ripgrep, dmenu 
+# DEPS: ripgrep, bemenu 
 
 MENU_CMD="bemenu --prompt sys"
 CONFIG_FILE="$HOME/.sysmenu"
 
-awnser=$(rg -o "^[^#:]*" $CONFIG_FILE | $MENU_CMD)
+awnser=$(rg -o -r '$1' "^([^\n:# ]*)[: ]" $CONFIG_FILE | $MENU_CMD)
 
 if [ "$awnser" = "" ] ; then
    exit -1
 fi
 
-eval $(rg -o -r '$2' "($awnser[\s:]*)([^#\n]*)" $CONFIG_FILE)
+/bin/sh -c $(rg -o -r '$2' "^($awnser[\s:]*)([^#\n]*)" $CONFIG_FILE) &
