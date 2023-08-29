@@ -12,4 +12,4 @@ if [ "$awnser" = "" ] ; then
    exit -1
 fi
 
-/bin/sh -c $(rg -o -r '$2' "^($awnser[\s:]*)([^#\n]*)" $CONFIG_FILE) &
+eval $(rg -o -r '$2' "^($awnser[\s:]*)([^#\n]*)" $CONFIG_FILE)
