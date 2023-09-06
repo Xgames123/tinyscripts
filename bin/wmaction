@@ -1,0 +1,7 @@
+#!/bin/bash
+# Sends an action to the window manager and quits it
+# Usage: wmaction <action>
+
+action=$1
+echo "$action" > /tmp/wm_exit_action
+killall -e $(cat /tmp/wm) -s SIGTERM

@@ -8,7 +8,7 @@ CONFIG_FILE="$HOME/.sysmenu"
 
 awnser=$(rg -o -r '$1' "^([^\n:# ]*)[: ]" $CONFIG_FILE | $MENU_CMD)
 
-if [ "$awnser" = "" ] ; then
+if [ -z "$awnser" ] ; then
    exit -1
 fi
 
