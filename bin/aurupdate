@@ -1,0 +1,9 @@
+#!/bin/bash
+# Updates or installs all aur packages in $HOME/repos/aur
+
+AUR_DIR=$HOME/source/aur
+
+for dir in $AUR_DIR/* ; do
+  cd $dir
+  makepkg --install --syncdeps --needed
+done
