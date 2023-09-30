@@ -1,8 +1,10 @@
 #!/bin/sh
 
-fifo=/tmp/dwltags-1
+echo "dwlproxy init"
+
+file=/tmp/dwltags
 
 while IFS='$\n' read -r line;
 do
-	echo "$data" > $fifo
+  echo "$line" >> $file
 done
