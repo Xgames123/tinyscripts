@@ -1,9 +1,8 @@
 #!/bin/sh
 
-echo "dwlproxy init"
-
 file=/tmp/dwltags
-
+echo "dwlproxy ready"
+echo "" > $file
 while IFS='$\n' read -r line;
 do
   echo "$line" >> $file

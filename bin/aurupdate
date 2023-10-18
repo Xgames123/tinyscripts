@@ -1,9 +1,25 @@
 #!/bin/bash
 # Updates or installs all aur packages in $HOME/repos/aur
+# Usage: aurupdate [--force|-F|--status|-s]
+# --force -F     runs git reset --hard before every install
+# --status -s    gets the git status of every aur repo (doesn't rebuild or install)
 
 AUR_DIR=$HOME/source/aur
 
 for dir in $AUR_DIR/* ; do
+  echo ""
+  echo "REPO: $dir"
   cd $dir
+  if [ "$1" = "--status" ] || [ "$1" = '-s' ] ; then
+    git status
+    continue
+  fi
+  if [ "$1" = "--force" ] || [ "$1" = "-F" ] ; then
+    if [ ! -f "$dir/.GIT_NORESET" ] ; then
+      echo "RESETTING: $dir"
+      git reset --hard
+    fi
+  fi
+  git pull
   makepkg --install --syncdeps --needed
 done
