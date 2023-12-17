@@ -14,12 +14,17 @@ PASSWORD_DIR="$HOME/.password-store"
 
 command=$1
 if [ -z "$command" ] ; then
-  command=$(echo $'type\nclip\nadd\nedit\ngen' | $MENU_CMD)
+  command=$(echo $'type\nclip\nadd\nedit\ngen\nsync' | $MENU_CMD --prompt pass)
 fi
 if [ -z "$command" ] ; then
   exit -1
 fi
 
+
+if [ "$command" = "sync" ] ; then
+  pass git pull
+  pass git push
+fi
 
 if [ "$command" = "add" ] || [ "$command" = "gen" ] ; then
   name=$(find $PASSWORD_DIR -type d -not -path '*/\.git*' | rg -o -r '$1/' '\.password-store/(.*)$' | $MENU_CMD --prompt name)

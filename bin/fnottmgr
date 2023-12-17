@@ -5,29 +5,27 @@
 BEMENU_CMD=bemenu
 
 notifs=$(fnottctl list)
-command=$(echo "$notifs"$'\n'"dismiss all"$'\n'"quit fnott"| $BEMENU_CMD --prompt "fnottmgr")
+command=$(echo "$notifs"$'\n'"dismiss"$'\n'"dismiss all"$'\n'"quit fnott"| $BEMENU_CMD --prompt "fnottmgr")
 if [ -z "$command" ] ; then
   exit -1
 fi
 
-if [ "$command" = "dismiss all" ] ; then
-  for noty in $(fnottctl list | rg -o "^[0-9]*") ; do
-    fnottctl dismiss $(echo $noty | rg "^[0-9]*")
-  done
+if [ "$command" = "dismiss" ] ; then
+  fnottctl dismiss
   exit 0
 fi
 
-if [ "$command" = "quit fnott" ] ; then
+if [ "$command" = "dismiss all" ] ; then
+  fnottctl dismiss all
+  exit 0
+fi
+
+if [ "$command" = "restart fnott" ] ; then
   fnottctl quit
+  fnott &
   exit 0
 fi
 
 id=$(echo $command | rg -o "^[0-9]*" )
-notif_command=$(echo "actions"$'\n'"dismiss" | $BEMENU_CMD --prompt $id)
-if [ "$notif_command" = "actions" ] ; then
-  fnottctl actions $id
-elif [ "$notif_command" = "dismiss" ] ; then
-  fnottctl dismiss $id
-fi
-
-
+fnottctl actions $id
+fnottctl dismiss $id &> /dev/null
