@@ -1,0 +1,19 @@
+#!/bin/bash
+# Sends a low disk space warning notification when the disk space is low
+# Usage: diskwarn
+
+SLEEP_TIME=3600
+FS="/"
+
+while true ; do
+  if [ "$(df $FS | awk '$4<10000000 {print "true"}' | tail -n 1)" = "true" ] ; then
+    notify-send "Disk space is lower than 10 GB" -a "diskwarn" -u low
+  fi
+  if [ "$(df $FS | awk '$4<5000000 {print "true"}' | tail -n 1)" = "true" ] ; then
+    notify-send "Disk space is lower than 5 GB" -a "diskwarn"
+  fi
+  if [ "$(df $FS | awk '$4<1000000 {print "true"}' | tail -n 1)" = "true" ] ; then
+    notify-send "Disk space is lower than 1 GB" -a "diskwarn" -u critical
+  fi
+  sleep $SLEEP_TIME
+done
