@@ -1,5 +1,5 @@
 # Maintainer: ldev <ldev@ldev.eu.org>
-pkgver=r29.c61f313
+pkgver=r30.7a0d88e
 pkgrel=1
 
 pkgname='tinyscripts'
