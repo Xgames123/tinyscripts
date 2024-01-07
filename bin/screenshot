@@ -10,7 +10,6 @@
 SCREENSHOT_DIR=~/Pictures/Screenshots
 MENU_CMD="bemenu"
 TEMP_FILE="/tmp/screenshot.png"
-RECORD_TEMP_FILE="/tmp/record.mp4"
 
 record_fps=60
 record_audio=false
@@ -64,11 +63,17 @@ record_settings ()
 
 if $record ; then
   if ! killall wf-recorder ; then
+    rm -f /tmp/record_location
+    foot sh -c "yazi --chooser-file /tmp/record_location $SCREENSHOT_DIR"
+    if ! [ -f "/tmp/record_location" ] ; then
+      exit 1
+    fi
+    file=$(cat /tmp/record_location)
+    rm -f $file
     record_settings
-    rm -f $RECORD_TEMP_FILE
 
     geom=$(get_geom)
-    flags="-f $RECORD_TEMP_FILE --framerate $record_fps"
+    flags="-f $file --framerate $record_fps"
     if $record_audio ; then
       flags="$flags -a"
     fi
@@ -77,14 +82,11 @@ if $record ; then
     else
       wf-recorder $flags
     fi
-    exit 0
+
   fi
+  exit 0
 else
   screenshot
-fi
-
-if $record ; then
-  TEMP_FILE=$RECORD_TEMP_FILE
 fi
 
 cat $TEMP_FILE | wl-copy
@@ -92,7 +94,8 @@ cat $TEMP_FILE | wl-copy
 action=$(echo $'save (yazi)\nffplay' | $MENU_CMD --prompt output )
 
 if [ "$action" = "save (yazi)" ] ; then
-  foot sh -c "yazi --chooser-file /tmp/screenshot_location $SCREENSHOT_DIR ; mv $TEMP_FILE \$(cat /tmp/screenshot_location)"
+  rm -f /tmp/screenshot_location
+  foot sh -c "yazi --chooser-file /tmp/screenshot_location $SCREENSHOT_DIR ; ffmpeg -y -i $TEMP_FILE \$(cat /tmp/screenshot_location)"
 elif [ "$action" = "ffplay" ] ; then
   ffplay $TEMP_FILE
 fi
