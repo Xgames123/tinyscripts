@@ -1,0 +1,6 @@
+#!/bin/bash
+# DEPS: wl-clipboard yazi
+# Usage: clipsave
+
+
+foot sh -c 'yazi --chooser-file /tmp/clipsave_path ;file=$(cat /tmp/clipsave_path); wl-paste > $file'
