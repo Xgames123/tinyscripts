@@ -1,63 +1,98 @@
 #!/bin/bash
 # A bemenu script for taking screenshots for wayland
-# DEPS: xdg-utils, wl-clipboard, slurp, grim, bemenu
-# Usage: screenshot [command]
+# DEPS: wl-clipboard, slurp, grim, bemenu, yazi (optional), wf-recorder (optional)
+# Usage: screenshot [OPTIONS] [command]
+# OPTIONS:
+#   -r --record   record video (wf-recorder)
 # Commands:
 #   select (default)
 #   full
 SCREENSHOT_DIR=~/Pictures/Screenshots
 MENU_CMD="bemenu"
 TEMP_FILE="/tmp/screenshot.png"
+RECORD_TEMP_FILE="/tmp/record.mp4"
 
-save ()
-{
-  name=$1
-  if [[ "$name" != *.png ]] ; then
-   name="$name.png"
-  fi
+record_fps=60
+record_audio=false
 
-  mkdir -p "$SCREENSHOT_DIR"
-  path="$SCREENSHOT_DIR/$name"
-  if [ -f $path ] ; then
-    action=$(echo $'overwrite\nexit' | $MENU_CMD --prompt exists)
-    if [ "$action" = "overwrite" ] ; then 
-      cp $TEMP_FILE "$path"
-    elif [[ "$action" = "exit" ]]; then
-      rm -f $TEMP_FILE
-      exit 0
-    elif [ -n "$action" ] ; then
-      save $action
-    fi
-  else
-    cp $TEMP_FILE "$path"
-  fi
-}
-
+record=false
 command=$1
+if [ "$1" = "-r" ] || [ "$1" = "--record" ] ; then
+  command=$2
+  record=true
+fi
+
 if [ -z "$command" ] ; then
   command="select"
 fi
-if [ -z "$command" ] ; then
-  exit -1
-fi
 
-if [ "$command" = "full" ] ; then
+get_geom ()
+{
+  if [ "$command" = "select" ] ; then
+    return $(slurp)
+  fi
+  return false
+}
+
+screenshot ()
+{
   grim $TEMP_FILE
-fi
-if [ "$command" = "select" ] ; then
-  slurp | grim -g - $TEMP_FILE
-fi
+  
+  geom=$(get_geom)
+  if [ "$geom" ] ; then
+    grim -g "$geom" $TEMP_FILE
+  fi
+}
 
-action=$(echo $'retake\nclipboard' | $MENU_CMD --prompt save ) 
+record_settings ()
+{
+  while true ; do
+    record=$(echo $'start\naudio off\naudio on' | $MENU_CMD --prompt record)
+    if [ "$record" = "" ] ; then
+      exit 1
+    elif [ "$record" = "audio on" ] ; then
+      record_audio=true
 
-if [ "$action" = "retake" ] ; then
+    elif [ "$record" = "audio off" ] ; then
+      record_audio=false
+
+    elif [ "$record" = "start" ] ; then
+      return true
+    fi
+  done
+}
+
+if $record ; then
+  if ! killall wf-recorder ; then
+    record_settings
+    rm -f $RECORD_TEMP_FILE
+
+    geom=$(get_geom)
+    flags="-f $RECORD_TEMP_FILE --framerate $record_fps"
+    if $record_audio ; then
+      flags="$flags -a"
+    fi
+    if [ "$geom" ] ; then
+      wf-recorder -g "$geom" $flags
+    else
+      wf-recorder $flags
+    fi
+    exit 0
+  fi
+else
   screenshot
-  exit 0
-elif [ "$action" = "clipboard" ] ; then
-  cat $TEMP_FILE | wl-copy
-elif [ -n "$action" ] ; then
-  save $action
 fi
-   
 
-rm -f $TEMP_FILE
+if $record ; then
+  TEMP_FILE=$RECORD_TEMP_FILE
+fi
+
+cat $TEMP_FILE | wl-copy
+
+action=$(echo $'save (yazi)\nffplay' | $MENU_CMD --prompt output )
+
+if [ "$action" = "save (yazi)" ] ; then
+  foot sh -c "yazi --chooser-file /tmp/screenshot_location $SCREENSHOT_DIR ; mv $TEMP_FILE \$(cat /tmp/screenshot_location)"
+elif [ "$action" = "ffplay" ] ; then
+  ffplay $TEMP_FILE
+fi

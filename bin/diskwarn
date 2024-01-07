@@ -1,22 +1,41 @@
 #!/bin/bash
-# Sends a low disk space warning notification when the disk space is low
-# Usage: diskwarn
+# Sends a low disk space notification when the disk space is low
+#
+# Usage: diskwarn [-o|--once]
+#  -o, --once    run diskwarn once instead of in a loop
+
 
 SLEEP_TIME=180 # 3 minutes
 FS="/"
 
-while true ; do
+send_noti ()
+{
+  val=$(df $FS | awk '$4<1000000 {print $4/1000000}' | tail -n 1)
+  if [ "$val" != "" ] ; then
+    notify-send "Disk space very low ($val GB)" -a "diskwarn" -u critical
+    return
+  fi
+  val=$(df $FS | awk '$4<5000000 {print $4/1000000}' | tail -n 1)
+  if [ "$val" != "" ] ; then
+    notify-send "Disk space low ($val GB)" -a "diskwarn" -u normal
+    return
+  fi
+  val=$(df $FS | awk '$4<10000000 {print $4/1000000}' | tail -n 1)
+  if [ "$val" != "" ] ; then
+    notify-send "Disk space is low ($val GB)" -a "diskwarn" -u low
+    return
+  fi
+}
+
+send_noti
+
+if [ "$1" = "--once" ] || [ "$1" = "-o" ] ; then
+  exit
+fi
+
+while $once ; do
   sleep $SLEEP_TIME
-  if [ "$(df $FS | awk '$4<1000000 {print "true"}' | tail -n 1)" = "true" ] ; then
-    notify-send "Disk space is lower than 1 GB" -a "diskwarn" -u critical
-    continue
-  fi
-  if [ "$(df $FS | awk '$4<5000000 {print "true"}' | tail -n 1)" = "true" ] ; then
-    notify-send "Disk space is lower than 5 GB" -a "diskwarn" -u normal
-    continue
-  fi
-  if [ "$(df $FS | awk '$4<10000000 {print "true"}' | tail -n 1)" = "true" ] ; then
-    notify-send "Disk space is lower than 10 GB" -a "diskwarn" -u low
-    continue
-  fi
+  send_noti
 done
+
+
