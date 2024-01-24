@@ -1,3 +1,7 @@
+>### Move to dotfiles
+> this project is moved to my [dotfiles](https://codeberg.org/ldev105/dotfiles)
+>
+
 # tinyscripts
 A bunch of tiny shell scripts. Most are for Linux.
 
